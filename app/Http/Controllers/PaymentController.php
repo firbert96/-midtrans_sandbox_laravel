@@ -21,10 +21,24 @@ class PaymentController extends Controller
     public function getPayment()
     {
         $client = new Client();
+        $urlToken = '';
+        if(env('APP_ENV') == 'prod')
+        {
+            $urlToken = env('URL_TOKEN_PROD');
+        }
+        else if(env('APP_ENV') == 'dev')
+        {
+            $urlToken = env('URL_TOKEN_DEV');
+        }
+
         try
         {
-            $res = $client->request('POST',env('URL_TOKEN'), []);
+            $res = $client->request('POST',$urlToken, []);         
             $data = json_decode($res->getBody()->getContents());
+            if(!isset($data->token))
+            {
+                return response()->json(['result'=>$res,'data'=>$data]);
+            }
             return view('payment',['token'=> $data->token]);
         }catch(Exception $e)
         {

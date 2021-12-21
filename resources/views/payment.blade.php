@@ -1,3 +1,15 @@
+<?php 
+    if(env('APP_ENV') == 'prod')
+    {
+        $srcSnapJS = env('SRC_SNAP_JS_PROD');
+        $clientKey = env('CLIENT_KEY_MIDTRANS_PROD');
+    }
+    else if(env('APP_ENV') == 'dev')
+    {
+        $srcSnapJS = env('SRC_SNAP_JS_DEV');
+        $clientKey = env('CLIENT_KEY_MIDTRANS_DEV');
+    }
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,7 +18,7 @@
     <body>
         <div style="margin:5%">
             <button id="pay-button" type="button" class="btn btn-primary">Pay</button>
-            <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{env('CLIENT_KEY_MIDTRANS')}}"></script>
+            <script src="{{$srcSnapJS}}" data-client-key="{{$clientKey}}"></script>
             <script type="text/javascript">
                 document.getElementById('pay-button').onclick = function(){
                     // SnapToken acquired from previous step           
